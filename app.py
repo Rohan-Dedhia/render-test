@@ -18,40 +18,47 @@ def two_sample(a, b, alternative):
     n2 = len(b)
 
     alpha = 0.05/2
-    df = n1+n2-2
+    df = n1 + n2 - 2
 
     se = np.sqrt((sd1**2)/(n1) + (sd2**2)/n2)
 
     t_table_pos = t.ppf(1-alpha, df)
     t_table_neg = t.ppf(alpha, df)
 
-    tcal = ((xbar1-xbar2)-0)/se
+    tcal = ((xbar1 - xbar2) - 0) / se
 
     if alternative == "two-sided":
-        pvalue = 2*(1-t.cdf(abs(tcal), df))
+        pvalue = 2 * (1 - t.cdf(abs(tcal), df))
     elif alternative == "left":
         pvalue = t.cdf(tcal, df)
     else:
-        pvalue = 1-t.cdf(tcal, df)
+        pvalue = 1 - t.cdf(tcal, df)
 
     scipy_result = stats.ttest_ind(a, b, alternative='two-sided', equal_var=False)
 
     return {
-        "tcal": round(tcal,4),
-        "pvalue": round(pvalue,6),
-        "t_table_pos": round(t_table_pos,4),
-        "t_table_neg": round(t_table_neg,4),
+        "tcal": round(tcal, 4),
+        "pvalue": round(pvalue, 6),
+        "t_table_pos": round(t_table_pos, 4),
+        "t_table_neg": round(t_table_neg, 4),
         "scipy": str(scipy_result)
     }
 
 
-@app.route("/", methods=["GET","POST"])
+@app.route("/", methods=["GET", "POST"])
 def index():
 
     result = None
 
     if request.method == "POST":
 
+        # Student details
+        name = request.form["name"]
+        roll = request.form["roll"]
+        sapid = request.form["sapid"]
+        age = request.form["age"]
+
+        # Marks samples
         sample1 = request.form["sample1"]
         sample2 = request.form["sample2"]
         alternative = request.form["alt"]
@@ -59,10 +66,16 @@ def index():
         a = list(map(float, sample1.split(",")))
         b = list(map(float, sample2.split(",")))
 
-        result = two_sample(a,b,alternative)
+        result = two_sample(a, b, alternative)
+
+        # Add student details to result
+        result["name"] = name
+        result["roll"] = roll
+        result["sapid"] = sapid
+        result["age"] = age
 
     return render_template("index.html", result=result)
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=10000)

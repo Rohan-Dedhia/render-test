@@ -10,11 +10,27 @@
 
 <form method="post">
 
-<label>Sample 1 (comma separated)</label><br>
-<input type="text" name="sample1" size="50"><br><br>
+<h3>Student Information</h3>
 
-<label>Sample 2 (comma separated)</label><br>
-<input type="text" name="sample2" size="50"><br><br>
+<label>Student Name</label><br>
+<input type="text" name="name" required><br><br>
+
+<label>Roll Number</label><br>
+<input type="text" name="roll" required><br><br>
+
+<label>SAP ID</label><br>
+<input type="text" name="sapid" required><br><br>
+
+<label>Age</label><br>
+<input type="number" name="age" required><br><br>
+
+<h3>Marks Data</h3>
+
+<label>Marks Sample 1 (comma separated)</label><br>
+<input type="text" name="sample1" size="50" placeholder="70,75,80,85"><br><br>
+
+<label>Marks Sample 2 (comma separated)</label><br>
+<input type="text" name="sample2" size="50" placeholder="60,65,70,75"><br><br>
 
 <label>Alternative Hypothesis</label><br>
 
@@ -32,7 +48,14 @@
 
 {% if result %}
 
-<h3>Results</h3>
+<h3>Student Details</h3>
+
+<p>Name: {{result.name}}</p>
+<p>Roll Number: {{result.roll}}</p>
+<p>SAP ID: {{result.sapid}}</p>
+<p>Age: {{result.age}}</p>
+
+<h3>T-Test Results</h3>
 
 <p>T Calculated: {{result.tcal}}</p>
 <p>P Value: {{result.pvalue}}</p>
